@@ -1,0 +1,63 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          dontsuck
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: dontstarve_init
+# Description:       dontstarve dontsuck initscript
+### END INIT INFO
+
+# Author: knope github.com/knope
+#
+
+DESC="dontstarve dontsuck initscript"
+sucky_home="/home/dontsuck/app"
+sucky_logs="${sucky_home}/log"
+sucky_executable="${sucky_home}/bin/dontstarve_dedicated_server_nullrenderer"
+sucky_backups="${sucky_home}/back"
+
+############
+## begin sucky functions
+############
+### begin sucky user function
+#
+sucky_user() {
+    who_i_be=`(whoami)`
+    if [ $who_i_be = dontsuck ]
+    then
+        /bin/bash -c "$1"
+    else
+        echo '        ... '
+        echo '        wrong user! do it again!!!!         [-.-]'
+    fi
+}
+#
+### end sucky user function
+### begin sucky message
+#
+sucky_message() {
+    say="$1"
+    if pgrep -u dontsuck -f dontstarve_dedicated_server_nullrenderer > /dev/null
+    then
+        sucky_user ". ~/.profile ; screen -p 0 -s terriblescreenisnot -X eval 'stuff \"${say}\"\015'"
+    else
+        echo 'bad, go try when the server is actually running you twit, :P'
+    fi
+}
+#
+### end sucky message function
+### begin sucky start function
+#
+sucky_start() {
+    if pgrep -u dontsuck -f dontstarve_dedicated_server_nullrenderer > /dev/null
+    then
+        echo '        the sucky server is running already!  [-.-]'
+    else
+        echo '        o look at you trying to start the server and stuff   [-.-]'
+        echo "            i suppose we'll start now..."
+	sucky_user ". ~/.profile ; cd ${sucky_home}/bin ; screen -dms terriblescreenisnot ${sucky_executable}"
+}
+#
+### end sucky start function
